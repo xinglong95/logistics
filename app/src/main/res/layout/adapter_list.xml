@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/kuang_chuangjian"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/black333"
+            android:textSize="15sp"
+            android:paddingLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_zhongliang"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black333"
+            android:textSize="15sp" />
+
+
+        <TextView
+            android:id="@+id/tv_jiage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_shuliang"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black333"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+</RelativeLayout>

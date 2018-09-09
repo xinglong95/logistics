@@ -1,0 +1,5 @@
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">CSLibrary</string>
+    <string name="loading">加载中… …</string>
+    <string name="net_connect_error">网络连接错误！</string>
+</resources>
