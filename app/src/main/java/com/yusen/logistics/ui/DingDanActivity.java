@@ -31,6 +31,7 @@ import com.yusen.logistics.base.APIConfig;
 import com.yusen.logistics.base.BaseActivity;
 import com.yusen.logistics.base.ConstantConfig;
 import com.yusen.logistics.bean.ShangPinInfoBean;
+import com.yusen.logistics.bean.ShangPinJiShuBean;
 import com.yusen.logistics.utils.FileService;
 
 import org.xutils.http.RequestParams;
@@ -64,6 +65,7 @@ public class DingDanActivity extends BaseActivity {
     private IntentFilter mFilter;
     ScannerInerface Controll = new ScannerInerface(this);
     List<ShangPinInfoBean> list = new ArrayList<>();
+    List<ShangPinJiShuBean> list_num = new ArrayList<>();
     AbsBaseAdapter adapter;
     final FileService fs = new FileService(me);
     //6923410717242
@@ -88,16 +90,16 @@ public class DingDanActivity extends BaseActivity {
                 getShangPinInfo(scanResult);
             }
         };
-        adapter = new AbsBaseAdapter<ShangPinInfoBean>(this, R.layout.adapter_list) {
+        adapter = new AbsBaseAdapter<ShangPinJiShuBean>(this, R.layout.adapter_list) {
             @Override
-            protected void bindDatas(ViewHolder viewHolder, ShangPinInfoBean data, int position) {
-                viewHolder.bindTextView(R.id.tv_name, position + 1+"、"+data.getP_Name());
-                viewHolder.bindTextView(R.id.tv_zhongliang, data.getP_Weight() + "g");
-                viewHolder.bindTextView(R.id.tv_jiage, data.getP_Price());
-                viewHolder.bindTextView(R.id.tv_shuliang, data.getP_Num()+"");
+            protected void bindDatas(ViewHolder viewHolder, ShangPinJiShuBean data, int position) {
+                viewHolder.bindTextView(R.id.tv_name, position + 1+"、"+data.getBean().getP_Name());
+                viewHolder.bindTextView(R.id.tv_zhongliang, data.getBean().getP_Weight() + "g");
+                viewHolder.bindTextView(R.id.tv_jiage, data.getBean().getP_Price());
+                viewHolder.bindTextView(R.id.tv_shuliang, data.getCount()+"");
             }
         };
-        adapter.setDatas(list);
+        adapter.setDatas(list_num);
         lvDingdanliebiao.setAdapter(adapter);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +137,8 @@ public class DingDanActivity extends BaseActivity {
                 if (responseT.isOk()) {
                     if (responseT.getData() != null) {
                         list.add(responseT.getData());
-                        adapter.setDatas(list);
+                        list_num=AssembleData(list);
+                        adapter.setDatas(list_num);
                         getAllWei_Pric();
                     }
                     dismissLoadingDialog();
@@ -145,34 +148,36 @@ public class DingDanActivity extends BaseActivity {
             }
         });
     }
-//    private List<ShangPinInfoBean> AssembleData(List<ShangPinInfoBean> data){
-//        //用来记录运算后的数据
-//        Map<String, ShangPinInfoBean> resultMap = new LinkedHashMap<>();
-//        /**
-//         * 运算到的位置记录
-//         */
-//        int countIndex = 0;
-//
-//        while (countIndex < data.size()) {
-//            String s = data.get(countIndex).getP_ID();
-//            //如果这个值运算过 不再运算
-//            if (resultMap.get(s) != null) {
-//                countIndex++;
-//                continue;
-//            }
-//            ShangPinInfoBean group = new ShangPinInfoBean();
-//            group.getP_ID() = s;
-//            for (int i = countIndex; i < data.length; i++) {
-//                if (data[i].equals(s)) {
-//                    group.count++;
-//                }
-//            }
-//            resultMap.put(s, group);
-//            countIndex++;
-//        }
-//        return new ArrayList<Group>(resultMap.values());
-//
-//    }
+    private List<ShangPinJiShuBean> AssembleData(List<ShangPinInfoBean> data){
+        //用来记录运算后的数据
+        Map<String, ShangPinJiShuBean> resultMap = new LinkedHashMap<>();
+        /**
+         * 运算到的位置记录
+         */
+        int countIndex = 0;
+
+        while (countIndex < data.size()) {
+            String s = data.get(countIndex).getP_ID();
+            //如果这个值运算过 不再运算
+            if (resultMap.get(s) != null) {
+                countIndex++;
+                continue;
+            }
+            ShangPinJiShuBean bean=new ShangPinJiShuBean();
+            bean.setBean(data.get(countIndex));
+            for (int i = countIndex; i < data.size(); i++) {
+                if (data.get(i).getP_ID().equals(s)) {
+                    int count=bean.getCount();
+                    count++;
+                    bean.setCount(count);
+                }
+            }
+            resultMap.put(s, bean);
+            countIndex++;
+        }
+        return new ArrayList<ShangPinJiShuBean>(resultMap.values());
+
+    }
     double allpic=0;
     double allwei=0;
     /**
