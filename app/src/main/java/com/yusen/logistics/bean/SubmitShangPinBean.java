@@ -1,6 +1,25 @@
 package com.yusen.logistics.bean;
 
 public class SubmitShangPinBean {
+    private String pid;
+
+    public String getP_type() {
+        return p_type;
+    }
+
+    public void setP_type(String p_type) {
+        this.p_type = p_type;
+    }
+
+    public String getPid() {
+
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
     private String barcode;
     private String brand="";
     private String brandid="0";
@@ -35,14 +54,6 @@ public class SubmitShangPinBean {
 
     public void setBrandid(String brandid) {
         this.brandid = brandid;
-    }
-
-    public String getP_typ() {
-        return p_type;
-    }
-
-    public void setP_typ(String p_typ) {
-        this.p_type = p_typ;
     }
 
     public String getP_typeid() {

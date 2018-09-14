@@ -68,7 +68,7 @@ public class DingDanActivity extends BaseActivity {
         setContentView(R.layout.activity_ding_dan);
         ButterKnife.bind(this);
         Controll.open();
-        Controll.enablePlayBeep(false);
+        Controll.enablePlayBeep(true);
         Controll.setOutputMode(1);//使用广播模式0为模拟输出  1为广播模式发送
         Controll.unlockScanKey();
         mFilter = new IntentFilter("android.intent.action.SCANRESULT");

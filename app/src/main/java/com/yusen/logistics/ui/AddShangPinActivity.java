@@ -26,6 +26,7 @@ import com.yusen.logistics.base.APIConfig;
 import com.yusen.logistics.base.BaseActivity;
 import com.yusen.logistics.bean.LeiMuBean;
 import com.yusen.logistics.bean.PinPaiBean;
+import com.yusen.logistics.bean.ShangPinInfoBean;
 import com.yusen.logistics.bean.SubmitShangPinBean;
 import com.yusen.logistics.utils.SerachSelectDialog;
 
@@ -82,7 +83,7 @@ public class AddShangPinActivity extends BaseActivity {
         getLeiMuShuJu();
         getPinPaiShuJu();
         Controll.open();
-        Controll.enablePlayBeep(false);
+        Controll.enablePlayBeep(true);
         Controll.setOutputMode(1);//使用广播模式0为模拟输出  1为广播模式发送
         Controll.unlockScanKey();
         mFilter = new IntentFilter("android.intent.action.SCANRESULT");
@@ -94,10 +95,50 @@ public class AddShangPinActivity extends BaseActivity {
                 int barocodelen = intent.getIntExtra("length", 0);
                 int type = intent.getIntExtra("type", 0);
                 tvTiaoma.setText(scanResult);
+                getShangPinInfo(scanResult);
             }
         };
     }
 
+    /**
+     * 获取商品信息
+     */
+    private void getShangPinInfo(String barcode) {
+        RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
+        params.addBodyParameter("DataType", "Product_Scan");
+        params.addBodyParameter("barcode",barcode);
+        XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(String result) {
+                NetBean<ShangPinInfoBean, ?> responseT = GsonUtils
+                        .parseJson(
+                                result,
+                                new TypeToken<NetBean<ShangPinInfoBean, ?>>() {
+                                }.getType());
+                if (responseT.isOk()) {
+                    if (responseT.getData()!=null){
+                        setText(responseT.getData());
+                    }
+                }
+            }
+        });
+    }
+    boolean isUpdate=false;
+    private void setText(ShangPinInfoBean infobean){
+        isUpdate=true;
+        bean.setPid(infobean.getP_ID());
+        tvTiaoma.setText(infobean.getP_Number());
+        etShangpimingcheng.setText(infobean.getP_Name());
+        tvPinpai.setText(infobean.getP_Brand());
+        bean.setBrandid(infobean.getP_BrandID());
+        tvLeimu.setText(infobean.getP_Type());
+        bean.setP_typeid(infobean.getP_TypeID());
+        etShangpinguige.setText(infobean.getP_Spec());
+        etShangpinjianjie.setText(infobean.getP_Function());
+        etShangpinzhongliang.setText(infobean.getP_Weight());
+        etDanjia.setText(infobean.getP_Price());
+        etTiji.setText(infobean.getP_Volume());
+    }
     /**
      * @return 判空
      */
@@ -134,7 +175,7 @@ public class AddShangPinActivity extends BaseActivity {
         bean.setBarcode(tvTiaoma.getText().toString());
         bean.setBrand(tvPinpai.getText().toString());
 //        bean.setBrandid("");
-        bean.setP_typ(tvLeimu.getText().toString());
+        bean.setP_type(tvLeimu.getText().toString());
 //        bean.setP_typeid("");
         bean.setName(etShangpimingcheng.getText().toString());
         bean.setFuncation(etShangpinjianjie.getText().toString());
@@ -244,7 +285,37 @@ public class AddShangPinActivity extends BaseActivity {
         //设置Dialog 尺寸
         mDialog.setDialogWindowAttr(0.9, 0.9, me);
     }
-
+    /**
+     * 更新商品
+     */
+    private void updateShangPin() {
+        showLoadingDialog();
+        RequestParams params = new RequestParams(APIConfig.ShangPin.AddShangPin);
+        params.addBodyParameter("DataType", "Product_Update");
+        for (Field field : bean.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            try {
+                params.addBodyParameter(field.getName(), field.get(bean) + "");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(String result) {
+                NetBean<?, PinPaiBean> responseT = GsonUtils
+                        .parseJson(
+                                result,
+                                new TypeToken<NetBean<?, PinPaiBean>>() {
+                                }.getType());
+                if (responseT.isOk()) {
+                    dismissLoadingDialog();
+                    ToastUtil.showShort("更新完成!");
+                    me.finish();
+                }
+            }
+        });
+    }
     /**
      * 提交商品
      */
@@ -290,7 +361,12 @@ public class AddShangPinActivity extends BaseActivity {
                 break;
             case R.id.btn_tijiaodingdan:
                 if (isNull()){
-                    postShangPin();
+                    if (isUpdate){
+                        updateShangPin();
+                    }else{
+                        postShangPin();
+                    }
+
                 }
                 break;
         }

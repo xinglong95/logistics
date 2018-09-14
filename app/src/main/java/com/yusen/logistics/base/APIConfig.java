@@ -12,6 +12,8 @@ public class APIConfig {
     }
     public class ShangPin{
         public static final String AddShangPin = IP +"/api/Product.ashx";// app接口
+        public static final String getShangPin = IP +"/api/Waybill.ashx";// app接口
+
     }
 
 }
