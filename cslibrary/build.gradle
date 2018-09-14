@@ -48,6 +48,5 @@ dependencies {
     compile files('libs/jpush-android_v3.0.6.jar')
     compile files('libs/jcore-android_v1.1.3.jar')
     compile 'com.yanzhenjie:recyclerview-swipe:1.1.4'
-
 //    compile project(':picture_library')
 }

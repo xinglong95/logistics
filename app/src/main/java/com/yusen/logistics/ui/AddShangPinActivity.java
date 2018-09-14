@@ -82,7 +82,7 @@ public class AddShangPinActivity extends BaseActivity {
         getLeiMuShuJu();
         getPinPaiShuJu();
         Controll.open();
-        Controll.enablePlayBeep(true);
+        Controll.enablePlayBeep(false);
         Controll.setOutputMode(1);//使用广播模式0为模拟输出  1为广播模式发送
         Controll.unlockScanKey();
         mFilter = new IntentFilter("android.intent.action.SCANRESULT");

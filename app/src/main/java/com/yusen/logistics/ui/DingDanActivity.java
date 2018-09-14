@@ -18,13 +18,7 @@ import com.citzx.cslibrary.net.RequestCallBack;
 import com.citzx.cslibrary.net.XutilHttpHelp;
 import com.citzx.cslibrary.utils.GsonUtils;
 import com.citzx.cslibrary.utils.MTextUtils;
-import com.citzx.cslibrary.utils.ToastUtil;
 import com.citzx.cslibrary.view.AbsBaseAdapter;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.yusen.logistics.R;
 import com.yusen.logistics.base.APIConfig;
@@ -36,9 +30,7 @@ import com.yusen.logistics.utils.FileService;
 
 import org.xutils.http.RequestParams;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,6 +39,9 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.addapp.pickers.entity.City;
+import cn.addapp.pickers.entity.County;
+import cn.addapp.pickers.entity.Province;
 
 public class DingDanActivity extends BaseActivity {
     @Bind(R.id.iv_back)
@@ -76,7 +71,7 @@ public class DingDanActivity extends BaseActivity {
         setContentView(R.layout.activity_ding_dan);
         ButterKnife.bind(this);
         Controll.open();
-        Controll.enablePlayBeep(true);
+        Controll.enablePlayBeep(false);
         Controll.setOutputMode(1);//使用广播模式0为模拟输出  1为广播模式发送
         Controll.unlockScanKey();
         mFilter = new IntentFilter("android.intent.action.SCANRESULT");
