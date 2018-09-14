@@ -39,9 +39,6 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.addapp.pickers.entity.City;
-import cn.addapp.pickers.entity.County;
-import cn.addapp.pickers.entity.Province;
 
 public class DingDanActivity extends BaseActivity {
     @Bind(R.id.iv_back)
@@ -59,7 +56,7 @@ public class DingDanActivity extends BaseActivity {
     private BroadcastReceiver mReceiver;
     private IntentFilter mFilter;
     ScannerInerface Controll = new ScannerInerface(this);
-    List<ShangPinInfoBean> list = new ArrayList<>();
+//    List<ShangPinInfoBean> list = new ArrayList<>();
     List<ShangPinJiShuBean> list_num = new ArrayList<>();
     AbsBaseAdapter adapter;
     final FileService fs = new FileService(me);
@@ -116,7 +113,7 @@ public class DingDanActivity extends BaseActivity {
     /**
      * 获取商品信息
      */
-    private void getShangPinInfo(String barcode) {
+    private void getShangPinInfo(final String barcode) {
         showLoadingDialog();
         RequestParams params = new RequestParams(APIConfig.ShangPin.AddShangPin);
         params.addBodyParameter("DataType", "Product_Scan");
@@ -131,8 +128,25 @@ public class DingDanActivity extends BaseActivity {
                                 }.getType());
                 if (responseT.isOk()) {
                     if (responseT.getData() != null) {
-                        list.add(responseT.getData());
-                        list_num=AssembleData(list);
+                        boolean isNew=true;
+                        if (list_num!=null&&list_num.size()!=0) {
+                            for (int i = 0; i < list_num.size(); i++) {
+                                if (responseT.getData().getP_ID().equals(list_num.get(i).getBean().getP_ID())) {
+                                    int count = list_num.get(i).getCount() + 1;
+                                    list_num.get(i).setCount(count);
+                                    isNew = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isNew){
+                            ShangPinJiShuBean bean=new ShangPinJiShuBean();
+                            bean.setCount(1);
+                            bean.setBean(responseT.getData());
+                            list_num.add(bean);
+                        }
+//                        list.add(responseT.getData());
+//                        list_num=AssembleData(list);
                         adapter.setDatas(list_num);
                         getAllWei_Pric();
                     }
@@ -181,9 +195,9 @@ public class DingDanActivity extends BaseActivity {
     private void getAllWei_Pric() {
         allpic=0;
         allwei=0;
-        for (int i = 0; i < list.size(); i++) {
-            allpic=allpic+Double.parseDouble(list.get(i).getP_Price());
-            allwei=allwei+Double.parseDouble(list.get(i).getP_Weight());
+        for (int i = 0; i < list_num.size(); i++) {
+            allpic=allpic+Double.parseDouble(list_num.get(i).getBean().getP_Price())*list_num.get(i).getCount();
+            allwei=allwei+Double.parseDouble(list_num.get(i).getBean().getP_Weight())*list_num.get(i).getCount();
         }
         tvGongji.setText("共计"+allwei+"g，"+allpic+"元");
     }
@@ -229,7 +243,7 @@ public class DingDanActivity extends BaseActivity {
 
     @OnClick(R.id.btn_tijiaodingdan)
     public void onViewClicked() {
-        list=new ArrayList<>();
+        list_num=new ArrayList<>();
         me.finish();
     }
     String dingdaninfostr;
@@ -240,14 +254,14 @@ public class DingDanActivity extends BaseActivity {
             e.printStackTrace();
         }
         if (MTextUtils.notEmpty(dingdaninfostr)){
-            list=GsonUtils.parseJsonList(dingdaninfostr,new TypeToken<List<ShangPinInfoBean>>(){}.getType());
-            adapter.setDatas(list);
+            list_num=GsonUtils.parseJsonList(dingdaninfostr,new TypeToken<List<ShangPinJiShuBean>>(){}.getType());
+            adapter.setDatas(list_num);
             getAllWei_Pric();
         }
     }
     private void SaveInfo(){
         try {
-            fs.saveToSD("logdingdan.txt", GsonUtils.toJSON(list));
+            fs.saveToSD("logdingdan.txt", GsonUtils.toJSON(list_num));
         } catch (IOException e) {
             e.printStackTrace();
         }
