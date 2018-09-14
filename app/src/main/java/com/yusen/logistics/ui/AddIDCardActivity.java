@@ -168,13 +168,13 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity {
                 idcardpath_z = localMedias_z.get(0).getCompressPath();
                 x.image().bind(ivIdcardZ, idcardpath_z);
                 recIDCard("front",idcardpath_z);
-                postFile(idcardpath_z);
+                postFile(idcardpath_z,1);//1代表正面
             } else if (requestCode == 12) {
                 localMedias_f = PictureSelector.obtainMultipleResult(data);
                 idcardpath_f = localMedias_f.get(0).getCompressPath();
                 x.image().bind(ivIdcardF, idcardpath_f);
                 recIDCard("back",idcardpath_f);
-                postFile(idcardpath_f);
+                postFile(idcardpath_f,0);//0代表反面
             }
         }
     }
@@ -182,7 +182,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity {
     /**
      * @param path  上传文件
      */
-    private void postFile(String path) {
+    private void postFile(String path,final int type) {
         showLoadingDialog();
         RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
         params.setMultipart(true);
@@ -191,10 +191,10 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
-                NetBean<?, LeiMuBean> responseT = GsonUtils
+                NetBean<String, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
-                                new TypeToken<NetBean<?, LeiMuBean>>() {
+                                new TypeToken<NetBean<String, ?>>() {
                                 }.getType());
                 if (responseT.isOk()) {
                     dismissLoadingDialog();
