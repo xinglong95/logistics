@@ -16,18 +16,25 @@ import com.baidu.ocr.sdk.exception.OCRError;
 import com.baidu.ocr.sdk.model.AccessToken;
 import com.baidu.ocr.sdk.model.IDCardParams;
 import com.baidu.ocr.sdk.model.IDCardResult;
+import com.citzx.cslibrary.net.NetBean;
+import com.citzx.cslibrary.net.RequestCallBack;
+import com.citzx.cslibrary.net.XutilHttpHelp;
 import com.citzx.cslibrary.utils.GsonUtils;
 import com.citzx.cslibrary.utils.ToastUtil;
 import com.code19.library.L;
+import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.yusen.logistics.R;
+import com.yusen.logistics.base.APIConfig;
 import com.yusen.logistics.base.BaseActivity;
 import com.yusen.logistics.base.ConstantConfig;
 import com.yusen.logistics.base.PhotoSelectBaseActivity;
+import com.yusen.logistics.bean.LeiMuBean;
 
+import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
@@ -161,12 +168,39 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity {
                 idcardpath_z = localMedias_z.get(0).getCompressPath();
                 x.image().bind(ivIdcardZ, idcardpath_z);
                 recIDCard("front",idcardpath_z);
+                postFile(idcardpath_z);
             } else if (requestCode == 12) {
                 localMedias_f = PictureSelector.obtainMultipleResult(data);
                 idcardpath_f = localMedias_f.get(0).getCompressPath();
                 x.image().bind(ivIdcardF, idcardpath_f);
                 recIDCard("back",idcardpath_f);
+                postFile(idcardpath_f);
             }
         }
+    }
+
+    /**
+     * @param path  上传文件
+     */
+    private void postFile(String path) {
+        showLoadingDialog();
+        RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
+        params.setMultipart(true);
+        params.addBodyParameter("DataType", "Waybill_Image_file");
+        params.addBodyParameter("File1",new File(path));
+        XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(String result) {
+                NetBean<?, LeiMuBean> responseT = GsonUtils
+                        .parseJson(
+                                result,
+                                new TypeToken<NetBean<?, LeiMuBean>>() {
+                                }.getType());
+                if (responseT.isOk()) {
+                    dismissLoadingDialog();
+
+                }
+            }
+        });
     }
 }
