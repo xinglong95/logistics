@@ -40,12 +40,12 @@
             android:drawablePadding="10dp"
             />
         <TextView
-            android:id="@+id/tv_gongsijianjie"
+            android:id="@+id/tv_yundanliebiao"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:textSize="15sp"
             android:textColor="#333333"
-            android:text="公司简介"
+            android:text="运单列表"
             android:gravity="center_vertical"
             android:drawableLeft="@drawable/icon_home_gongsi"
             android:paddingLeft="90dp"

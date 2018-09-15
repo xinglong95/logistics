@@ -42,6 +42,62 @@
             />
     </RelativeLayout>
     <LinearLayout
+        android:id="@+id/ll_yundandanhao"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="运单单号："
+            android:textColor="@color/black333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_yundandanhao"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@null"
+            android:textColor="@color/black333"
+            android:textSize="15sp"
+            android:textColorHint="#999999"
+            android:gravity="center_vertical"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d9d9d9"
+        />
+    <LinearLayout
+        style="@style/ll_shangchuanshangpin"
+        android:layout_height="40dp"
+        android:paddingLeft="15dp"
+        >
+        <TextView
+            style="@style/tv_shangchuanshangpin_l"
+            android:text="实际重量："
+            />
+        <EditText
+            android:id="@+id/et_shijizhongliang"
+            android:hint="请填写重量"
+            style="@style/tv_shangchuanshangpin_r"
+            android:inputType="numberDecimal"
+            />
+        <TextView
+            style="@style/tv_shangchuanshangpin_r"
+            android:text="g"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d9d9d9"
+        />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <TextView
@@ -118,7 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:text="提交订单"
+        android:text="下一步"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:gravity="center"

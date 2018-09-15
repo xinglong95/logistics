@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
-
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
 android {
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "YuSen_${defaultConfig.versionName}_${defaultConfig.versionCode}_${releaseTime()}.apk"
+        }
+
+    }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {

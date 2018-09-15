@@ -27,6 +27,7 @@ import com.yusen.logistics.base.BaseActivity;
 import com.yusen.logistics.bean.LeiMuBean;
 import com.yusen.logistics.bean.PinPaiBean;
 import com.yusen.logistics.bean.ShangPinInfoBean;
+import com.yusen.logistics.bean.SubmitDingDanBean;
 import com.yusen.logistics.bean.SubmitShangPinBean;
 import com.yusen.logistics.utils.SerachSelectDialog;
 
@@ -99,7 +100,6 @@ public class AddShangPinActivity extends BaseActivity {
             }
         };
     }
-
     /**
      * 获取商品信息
      */
@@ -366,7 +366,6 @@ public class AddShangPinActivity extends BaseActivity {
                     }else{
                         postShangPin();
                     }
-
                 }
                 break;
         }

@@ -93,9 +93,7 @@ public class XutilHttpHelp {
 			public void onFinished() {
 				L.d("onFinished");
 				requestCallBack.onFinished();
-
 			}
-			
 		});
 		return  cancelable;
 	}

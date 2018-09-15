@@ -95,4 +95,14 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="80dp"
         />
+    <TextView
+        android:id="@+id/tv_gongsijianjie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="公司简介"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black333"
+        />
 </RelativeLayout>

@@ -50,6 +50,11 @@
             android:textColor="@color/black333"
             android:textSize="15sp" />
 
-
+        <ImageView
+            android:id="@+id/iv_shanchu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_shanchu"
+            />
     </LinearLayout>
 </RelativeLayout>

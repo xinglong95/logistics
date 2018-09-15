@@ -2,9 +2,9 @@ package com.yusen.logistics.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.citzx.cslibrary.net.NetBean;
 import com.citzx.cslibrary.net.RequestCallBack;
@@ -33,6 +33,8 @@ public class LoginActivity extends BaseActivity {
     EditText etMima;
     @Bind(R.id.btn_denglu)
     Button btnDenglu;
+    @Bind(R.id.tv_gongsijianjie)
+    TextView tvGongsijianjie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,25 +42,27 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
     }
-    private boolean isNull(){
-        boolean isNull=true;
-        if (MTextUtils.isEmpty(etZhanghao.getText().toString())){
-            isNull=false;
+
+    private boolean isNull() {
+        boolean isNull = true;
+        if (MTextUtils.isEmpty(etZhanghao.getText().toString())) {
+            isNull = false;
             ToastUtil.showShort("请输入账号");
-        }else if(MTextUtils.isEmpty(etMima.getText().toString())){
-            isNull=false;
+        } else if (MTextUtils.isEmpty(etMima.getText().toString())) {
+            isNull = false;
             ToastUtil.showShort("请输入密码");
         }
         return isNull;
     }
+
     @OnClick(R.id.btn_denglu)
     public void onViewClicked() {
-        if (isNull()){
+        if (isNull()) {
             showLoadingDialog();
-            RequestParams params=new RequestParams(APIConfig.User.Login);
-            params.addBodyParameter("DataType","Login");
-            params.addBodyParameter("account",etZhanghao.getText().toString());
-            params.addBodyParameter("password",etMima.getText().toString());
+            RequestParams params = new RequestParams(APIConfig.User.Login);
+            params.addBodyParameter("DataType", "Login");
+            params.addBodyParameter("account", etZhanghao.getText().toString());
+            params.addBodyParameter("password", etMima.getText().toString());
             XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -67,16 +71,21 @@ public class LoginActivity extends BaseActivity {
                                     result,
                                     new TypeToken<NetBean<LoginInfoBean, ?>>() {
                                     }.getType());
-                    if (responseT.isOk()){
+                    if (responseT.isOk()) {
                         dismissLoadingDialog();
                         LOGApplication.setToken(responseT.getData().getToken());
                         LOGApplication.setUserinfo(responseT.getData());
                         ToastUtil.showShort("登录成功");
-                        startActivity(new Intent(me,MainActivity.class));
+                        startActivity(new Intent(me, MainActivity.class));
                         me.finish();
                     }
                 }
             });
         }
+    }
+
+    @OnClick(R.id.tv_gongsijianjie)
+    public void onViewClickedGongSi() {
+        startActivity(new Intent(me,JianJieActivity.class));
     }
 }

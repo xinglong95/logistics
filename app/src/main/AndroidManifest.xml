@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".base.LOGApplication"
         android:allowBackup="true"
@@ -18,7 +19,9 @@
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".ui.DingDanActivity" />
+        <activity
+            android:name=".ui.DingDanActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +31,13 @@
         </activity>
         <activity
             android:name=".ui.AddShangPinActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
-        <activity android:name=".ui.AddIDCardActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity
+            android:name=".ui.AddIDCardActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        <activity android:name=".ui.YunDanListActivity" />
+        <activity android:name=".ui.GenRenActivity" />
+        <activity android:name=".ui.JianJieActivity"></activity>
     </application>
 
 </manifest>

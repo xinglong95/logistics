@@ -11,7 +11,13 @@ public class LibraryApplication {
     private static String ShouJiHao="";//13455262992
     private static String Token="";//0
     private static String UUID="";//0
-
+    private static String AddressType="";
+    public static String getAddressType() {
+        return AddressType;
+    }
+    public static void setAddressType(String addressType) {
+        AddressType = addressType;
+    }
     public static void init(Context context) {
         LibraryApplication.context = context;
     }
