@@ -1,39 +1,69 @@
 package com.yusen.logistics.bean;
 
-public class ShangPinInfoBean {
+import java.io.Serializable;
+
+public class ShangPinInfoBean implements Serializable{
 
     /**
+     * WS_ID : 12
+     * W_ID : 11
      * P_ID : 2
-     * P_Country : 133
      * P_Brand : SK2
      * P_BrandID : 5
      * P_Number : 6923410717242
      * P_Name : 随身数码音乐音响
      * P_Spec : 规格不大
-     * P_Function : 动次打次
      * P_Weight : 100.00
      * P_Price : 150.00
      * P_Volume : 120.00
-     * P_Type :
-     * P_TypeID : 1
+     * P_Type : 其它
+     * P_TypeID : 4
+     * WS_Date : 2018/9/16 6:49:40
+     * WS_FirstCount : 4.00
+     * WS_Money : 600.00
      */
 
+    private String WS_ID;
+    private String W_ID;
     private String P_ID;
-    private String P_Country;
     private String P_Brand;
     private String P_BrandID;
     private String P_Number;
     private String P_Name;
     private String P_Spec;
-    private String P_Function;
     private String P_Weight;
     private String P_Price;
     private String P_Volume;
     private String P_Type;
     private String P_TypeID;
-    private String WS_ID;
-    private String W_ID;
+    private String WS_Date;
+    private String WS_FirstCount;
+    private String WS_Money;
+    private String P_Function;
 
+    public String getP_Function() {
+        return P_Function;
+    }
+
+    public void setP_Function(String p_Function) {
+        P_Function = p_Function;
+    }
+
+    public String getWS_ID() {
+        return WS_ID;
+    }
+
+    public void setWS_ID(String WS_ID) {
+        this.WS_ID = WS_ID;
+    }
+
+    public String getW_ID() {
+        return W_ID;
+    }
+
+    public void setW_ID(String W_ID) {
+        this.W_ID = W_ID;
+    }
 
     public String getP_ID() {
         return P_ID;
@@ -41,14 +71,6 @@ public class ShangPinInfoBean {
 
     public void setP_ID(String P_ID) {
         this.P_ID = P_ID;
-    }
-
-    public String getP_Country() {
-        return P_Country;
-    }
-
-    public void setP_Country(String P_Country) {
-        this.P_Country = P_Country;
     }
 
     public String getP_Brand() {
@@ -91,14 +113,6 @@ public class ShangPinInfoBean {
         this.P_Spec = P_Spec;
     }
 
-    public String getP_Function() {
-        return P_Function;
-    }
-
-    public void setP_Function(String P_Function) {
-        this.P_Function = P_Function;
-    }
-
     public String getP_Weight() {
         return P_Weight;
     }
@@ -137,5 +151,29 @@ public class ShangPinInfoBean {
 
     public void setP_TypeID(String P_TypeID) {
         this.P_TypeID = P_TypeID;
+    }
+
+    public String getWS_Date() {
+        return WS_Date;
+    }
+
+    public void setWS_Date(String WS_Date) {
+        this.WS_Date = WS_Date;
+    }
+
+    public String getWS_FirstCount() {
+        return WS_FirstCount;
+    }
+
+    public void setWS_FirstCount(String WS_FirstCount) {
+        this.WS_FirstCount = WS_FirstCount;
+    }
+
+    public String getWS_Money() {
+        return WS_Money;
+    }
+
+    public void setWS_Money(String WS_Money) {
+        this.WS_Money = WS_Money;
     }
 }

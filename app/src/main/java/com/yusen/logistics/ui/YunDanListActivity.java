@@ -21,7 +21,10 @@ import com.yusen.logistics.bean.YunDanListBean;
 
 import org.xutils.http.RequestParams;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -98,8 +101,14 @@ public class YunDanListActivity extends BaseActivity {
                 viewHolder.bindTextView(R.id.tv_danhao, "单号："+data.getW_OrderNo());
                 viewHolder.bindTextView(R.id.tv_shouhuoren, "收货人:"+data.getW_S_Name());
                 viewHolder.bindTextView(R.id.tv_shouhuodizhi, "收货地址："+data.getW_S_Province()+data.getW_S_City()+data.getW_S_District()+data.getW_S_Address());
+                SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy/MM/dd");//定义
+                try {
+                    Date d1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(data.getW_DeliveryDate() + "");//定义起始日期
+                    viewHolder.bindTextView(R.id.tv_fahuoshijian, sdf0.format(d1));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
-                viewHolder.bindTextView(R.id.tv_fahuoshijian, data.getW_DeliveryDate() + "");
             }
         };
         adapter.setDatas(list);

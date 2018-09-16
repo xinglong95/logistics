@@ -1,5 +1,6 @@
 package com.yusen.logistics.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends Activity {
     TextView tv;
     @Bind(R.id.tv_shangchuanshangpin)
     TextView tvShangchuanshangpin;
@@ -22,12 +23,13 @@ public class MainActivity extends BaseActivity {
     TextView tvYunDanLieBiao;
     @Bind(R.id.tv_gerenzhongxin)
     TextView tvGerenzhongxin;
-
+    MainActivity me;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        me=this;
     }
 
     @OnClick({R.id.tv_shangchuanshangpin, R.id.tv_chuangjindingdan, R.id.tv_yundanliebiao, R.id.tv_gerenzhongxin})

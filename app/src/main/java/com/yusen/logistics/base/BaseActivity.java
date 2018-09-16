@@ -18,6 +18,7 @@ public class BaseActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         me=this;
+        LOGApplication.addActivity(me);
     }
     private AlertDialog alertDialog;
 
@@ -29,7 +30,6 @@ public class BaseActivity extends Activity{
         alertDialog.setContentView(R.layout.loading_alert);
         alertDialog.setCanceledOnTouchOutside(false);
     }
-
     public void dismissLoadingDialog() {
         if (null != alertDialog && alertDialog.isShowing()) {
             alertDialog.dismiss();

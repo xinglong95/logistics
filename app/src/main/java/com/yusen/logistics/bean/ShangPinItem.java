@@ -20,10 +20,10 @@ public class ShangPinItem implements Serializable{
      * WS_Money : 300.00
      */
 
-    private String WS_ID;
-    private String P_ID;
+    private String WS_ID="0";
+    private String P_ID="0";
     private String P_Brand;
-    private String P_BrandID;
+    private String P_BrandID="0";
     private String P_Number;
     private String P_Name;
     private String P_Spec;
@@ -31,7 +31,7 @@ public class ShangPinItem implements Serializable{
     private String P_Price;
     private String P_Volume;
     private String P_Type;
-    private String P_TypeID;
+    private String P_TypeID="0";
     private String WS_FirstCount;
     private String WS_Money;
 

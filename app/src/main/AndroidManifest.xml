@@ -11,7 +11,7 @@
     <application
         android:name=".base.LOGApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo512"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -37,7 +37,8 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity android:name=".ui.YunDanListActivity" />
         <activity android:name=".ui.GenRenActivity" />
-        <activity android:name=".ui.JianJieActivity"></activity>
+        <activity android:name=".ui.JianJieActivity" />
+        <activity android:name=".ui.ChangePassActivity"></activity>
     </application>
 
 </manifest>

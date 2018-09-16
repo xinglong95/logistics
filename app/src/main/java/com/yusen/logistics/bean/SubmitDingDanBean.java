@@ -33,9 +33,12 @@ public class SubmitDingDanBean implements Serializable {
      * IdCard_EndDate : 2028
      * IdCard_Head : /Image/IdCard/1.png
      * IdCard_Tail : /Image/IdCard/2.png
+     *
      */
 
-    private String W_ID;
+    private String W_ID="0";
+    private String W_OrderNo;
+    private String W_State;
     private String W_DeliveryDate;
     private String W_F_Province;
     private String W_F_City;
@@ -62,13 +65,39 @@ public class SubmitDingDanBean implements Serializable {
     private String IdCard_EndDate;
     private String IdCard_Head;
     private String IdCard_Tail;
-    private List<ShangPinItem> Sub;
+    private String W_Actual_Weight;
 
-    public List<ShangPinItem> getSub() {
+    public String getW_Actual_Weight() {
+        return W_Actual_Weight;
+    }
+
+    public void setW_Actual_Weight(String w_Actual_Weight) {
+        W_Actual_Weight = w_Actual_Weight;
+    }
+
+    private List<ShangPinInfoBean> Sub;
+
+    public String getW_OrderNo() {
+        return W_OrderNo;
+    }
+
+    public void setW_OrderNo(String w_OrderNo) {
+        W_OrderNo = w_OrderNo;
+    }
+
+    public String getW_State() {
+        return W_State;
+    }
+
+    public void setW_State(String w_State) {
+        W_State = w_State;
+    }
+
+    public List<ShangPinInfoBean> getSub() {
         return Sub;
     }
 
-    public void setSub(List<ShangPinItem> sub) {
+    public void setSub(List<ShangPinInfoBean> sub) {
         Sub = sub;
     }
 

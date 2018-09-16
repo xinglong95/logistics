@@ -20,6 +20,7 @@ import com.citzx.cslibrary.net.RequestCallBack;
 import com.citzx.cslibrary.net.XutilHttpHelp;
 import com.citzx.cslibrary.utils.GsonUtils;
 import com.citzx.cslibrary.utils.MTextUtils;
+import com.citzx.cslibrary.utils.ToastUtil;
 import com.citzx.cslibrary.view.AbsBaseAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.yusen.logistics.R;
@@ -138,10 +139,10 @@ public class DingDanActivity extends BaseActivity {
         }
     }
     /**
-     * 获取商品信息列表
+     * 获取商品信息
      */
     private void getYundanInfo(final String wid) {
-        showLoadingDialog();
+//        showLoadingDialog();
         RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
         params.addBodyParameter("DataType", "Waybill_Main_Detail");
         params.addBodyParameter("wid", wid);
@@ -154,6 +155,11 @@ public class DingDanActivity extends BaseActivity {
                                 new TypeToken<NetBean<SubmitDingDanBean, ?>>() {
                                 }.getType());
                 if (responseT.isOk()) {
+                    if (responseT.getData()!=null){
+                        tvYundandanhao.setText(responseT.getData().getW_OrderNo());
+                        etShijizhongliang.setText(responseT.getData().getW_Actual_Weight());
+                        submitDingDanBean=responseT.getData();
+                    }
                     dismissLoadingDialog();
                 } else {
                     dismissLoadingDialog();
@@ -179,8 +185,16 @@ public class DingDanActivity extends BaseActivity {
                                 }.getType());
                 if (responseT.isOk()) {
                     if (responseT.getDatas() != null) {
-                         list_num=AssembleData(responseT.getDatas());
+                        for (int i = 0; i < responseT.getDatas().size(); i++) {
+                            ShangPinJiShuBean bean=new ShangPinJiShuBean();
+                            double count=Double.parseDouble(responseT.getDatas().get(i).getWS_FirstCount());
+                            bean.setCount((int)count);
+                            bean.setBean(responseT.getDatas().get(i));
+                            list_num.add(bean);
+                        }
+//                         list_num=AssembleData(responseT.getDatas());
                          adapter.setDatas(list_num);
+                         getAllWei_Pric();
                     }
                     dismissLoadingDialog();
                 } else {
@@ -309,9 +323,11 @@ public class DingDanActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        // 注销获取扫描结果的广播
+        // 注销获取扫描结果的广播+
         this.unregisterReceiver(mReceiver);
-        SaveInfo();
+        if (MTextUtils.isEmpty(wid)){
+            SaveInfo();
+        }
         super.onPause();
     }
 
@@ -326,33 +342,30 @@ public class DingDanActivity extends BaseActivity {
     @OnClick(R.id.btn_tijiaodingdan)
     public void onViewClicked() {
 //        list_num=new ArrayList<>();
-        List<ShangPinItem> items = new ArrayList<>();
-        for (int i = 0; i < list_num.size(); i++) {
-            ShangPinItem item = new ShangPinItem();
-            item.setP_ID(list_num.get(i).getBean().getP_ID());
-            item.setP_Brand(list_num.get(i).getBean().getP_Brand());
-            item.setP_BrandID(list_num.get(i).getBean().getP_BrandID());
-            item.setP_Name(list_num.get(i).getBean().getP_Name());
-            item.setP_Number(list_num.get(i).getBean().getP_Number());
-            item.setP_Price(list_num.get(i).getBean().getP_Price());
-            item.setP_Spec(list_num.get(i).getBean().getP_Spec());
-            item.setP_Volume(list_num.get(i).getBean().getP_Volume());
-            item.setP_Weight(list_num.get(i).getBean().getP_Weight());
-            item.setP_Type(list_num.get(i).getBean().getP_Type());
-            item.setP_TypeID(list_num.get(i).getBean().getP_TypeID());
-            item.setWS_FirstCount(list_num.get(i).getCount() + "");
-            double count = (double) list_num.get(i).getCount();
-            double price = Double.parseDouble(list_num.get(i).getBean().getP_Price());
-            item.setWS_Money((count * price) + "");
-            items.add(item);
+        if (list_num.size()==0){
+            ToastUtil.showShort("请扫描商品");
+        }else if(MTextUtils.isEmpty(etShijizhongliang.getText().toString())||Double.parseDouble(etShijizhongliang.getText().toString())>40000){
+            ToastUtil.showShort("请填写实际重量且不能超过40kg");
+        }else{
+            List<ShangPinInfoBean> items = new ArrayList<>();
+            for (int i = 0; i < list_num.size(); i++) {
+                ShangPinInfoBean item = new ShangPinInfoBean();
+                item=list_num.get(i).getBean();
+                double count = (double) list_num.get(i).getCount();
+                double price = Double.parseDouble(list_num.get(i).getBean().getP_Price());
+                item.setWS_FirstCount(list_num.get(i).getCount()+"");
+                item.setWS_Money((count * price) + "");
+                items.add(item);
+            }
+            submitDingDanBean.setSub(items);
+            Intent intent = new Intent(me, AddIDCardActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("DingDan", submitDingDanBean);
+            intent.putExtras(bundle);
+            intent.putExtra("weight",etShijizhongliang.getText().toString());
+            startActivity(intent);
         }
-        submitDingDanBean.setSub(items);
-        Intent intent = new Intent(me, AddIDCardActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("DingDan", submitDingDanBean);
-        intent.putExtras(bundle);
-        intent.putExtra("weight",etShijizhongliang.getText().toString());
-        startActivity(intent);
+
 //        me.finish();
     }
 

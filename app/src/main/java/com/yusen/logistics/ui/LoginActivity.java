@@ -41,6 +41,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        etZhanghao.setText(LOGApplication.getUsername());
+        etMima.setText(LOGApplication.getPassword());
     }
 
     private boolean isNull() {
@@ -75,6 +77,8 @@ public class LoginActivity extends BaseActivity {
                         dismissLoadingDialog();
                         LOGApplication.setToken(responseT.getData().getToken());
                         LOGApplication.setUserinfo(responseT.getData());
+                        LOGApplication.setUsername(etZhanghao.getText().toString());
+                        LOGApplication.setPassword(etMima.getText().toString());
                         ToastUtil.showShort("登录成功");
                         startActivity(new Intent(me, MainActivity.class));
                         me.finish();

@@ -24,6 +24,7 @@ import com.citzx.cslibrary.net.NetBean;
 import com.citzx.cslibrary.net.RequestCallBack;
 import com.citzx.cslibrary.net.XutilHttpHelp;
 import com.citzx.cslibrary.utils.GsonUtils;
+import com.citzx.cslibrary.utils.MTextUtils;
 import com.citzx.cslibrary.utils.MyTimeUtils;
 import com.citzx.cslibrary.utils.ToastUtil;
 import com.citzx.cslibrary.utils.Tools;
@@ -44,11 +45,13 @@ import com.yusen.logistics.base.APIConfig;
 import com.yusen.logistics.base.LOGApplication;
 import com.yusen.logistics.base.PhotoSelectBaseActivity;
 import com.yusen.logistics.bean.SubmitDingDanBean;
+import com.yusen.logistics.utils.FileService;
 
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -91,8 +94,8 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
     EditText etShouhuoren;
     @Bind(R.id.et_shouhuodianhua)
     EditText etShouhuodianhua;
-    @Bind(R.id.tv_suozaidiqu)
-    TextView tvSuozaidiqu;
+    @Bind(R.id.tv_shouhuodiqu)
+    TextView tvShouHuodiqu;
     @Bind(R.id.et_shouhuoxiangxidizhi)
     EditText etShouhuoxiangxidizhi;
     @Bind(R.id.ll_shenfenzhengxinxi)
@@ -101,8 +104,8 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
     EditText etFahuoren;
     @Bind(R.id.et_fahuoshouji)
     EditText etFahuoshouji;
-    @Bind(R.id.tv_fahuodizhi)
-    TextView tvFahuodizhi;
+    @Bind(R.id.tv_fahuodiqu)
+    TextView tvFahuodiqu;
     @Bind(R.id.et_fahuoxiangxidizhi)
     EditText etFahuoxiangxidizhi;
     BottomDialog dialog_china;
@@ -115,7 +118,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
     EditText etDaigoudianhua;
     @Bind(R.id.tv_fahuoshijian)
     TextView tvFahuoshijian;
-
+    final FileService fs = new FileService(me);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,8 +133,48 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         shijiweight = getIntent().getStringExtra("weight");
         initAccessToken();
         setFaHuoReniNFO();
+        if (!submitDingDanBean.getW_ID().equals("0")){
+            setText();
+        }
     }
+    private void setText(){
+        etXingming.setText(submitDingDanBean.getIdCard_Name());
+        etXingbie.setText(submitDingDanBean.getIdCard_Sex());
+        etMinzu.setText(submitDingDanBean.getIdCard_National());
+        etDizhi.setText(submitDingDanBean.getIdCard_Address());
+        etChushengnianyue.setText(submitDingDanBean.getIdCard_BrithDate());
+        etShenfenzhenghao.setText(submitDingDanBean.getIdCard_Number());
 
+        etFahuoren.setText(submitDingDanBean.getW_F_Name());
+        etFahuoshouji.setText(submitDingDanBean.getW_F_Tel());
+        etFahuoxiangxidizhi.setText(submitDingDanBean.getW_F_Address());
+        tvFahuodiqu.setText(submitDingDanBean.getW_F_Province()+submitDingDanBean.getW_F_City()+submitDingDanBean.getW_F_District());
+
+        etShouhuoren.setText(submitDingDanBean.getW_S_Name());
+        etShouhuodianhua.setText(submitDingDanBean.getW_S_Tel());
+        etShouhuoxiangxidizhi.setText(submitDingDanBean.getW_S_Address());
+        tvShouHuodiqu.setText(submitDingDanBean.getW_S_Province()+submitDingDanBean.getW_S_City()+submitDingDanBean.getW_S_District());
+        SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy/MM/dd");//定义
+        try {
+            Date d1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(submitDingDanBean.getW_DeliveryDate() + "");//定义起始日期
+            tvFahuoshijian.setText(sdf0.format(d1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        etDaigouren.setText(submitDingDanBean.getW_D_Name());
+        etDaigoudianhua.setText(submitDingDanBean.getW_D_Tel());
+
+        x.image().bind(ivIdcardZ,submitDingDanBean.getIdCard_Head());
+        x.image().bind(ivIdcardF,submitDingDanBean.getIdCard_Tail());
+        String path_z=submitDingDanBean.getIdCard_Head().substring(submitDingDanBean.getIdCard_Head().indexOf("/IdCard") + 1);
+        String path_f=submitDingDanBean.getIdCard_Tail().substring(submitDingDanBean.getIdCard_Tail().indexOf("/IdCard") + 1);
+        shijiweight=submitDingDanBean.getW_Actual_Weight();
+        submitDingDanBean.setIdCard_Head("/Image/"+path_z);
+        submitDingDanBean.setIdCard_Tail("/Image/"+path_f);
+
+
+
+    }
     /**
      * 获取数据
      */
@@ -167,7 +210,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
     private List<LocalMedia> localMedias_z = new ArrayList<>();
     private List<LocalMedia> localMedias_f = new ArrayList<>();
 
-    @OnClick({R.id.iv_idcard_z, R.id.iv_idcard_f, R.id.btn_tijiaodingdan, R.id.iv_back, R.id.tv_righttext, R.id.tv_suozaidiqu, R.id.tv_fahuodizhi,R.id.tv_fahuoshijian})
+    @OnClick({R.id.iv_idcard_z, R.id.iv_idcard_f, R.id.btn_tijiaodingdan, R.id.iv_back, R.id.tv_righttext, R.id.tv_shouhuodiqu, R.id.tv_fahuodiqu,R.id.tv_fahuoshijian})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_idcard_z:
@@ -185,7 +228,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
                 me.finish();
                 break;
 
-            case R.id.tv_suozaidiqu:
+            case R.id.tv_shouhuodiqu:
                 LibraryApplication.setAddressType("China");
                 if (dialog_china != null) {
                     dialog_china.show();
@@ -202,7 +245,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
                     dialog_china.show();
                 }
                 break;
-            case R.id.tv_fahuodizhi:
+            case R.id.tv_fahuodiqu:
                 LibraryApplication.setAddressType("Japan");
                 if (dialog_japan != null) {
                     dialog_japan.show();
@@ -272,7 +315,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
                     if (idCardSide.equals("front")) {
                         setIDCardInfo(result);
                     } else if (idCardSide.equals("back")) {
-                        SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy");//定义
+                        SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy/MM/dd");//定义
                         try {
                             Date d1 = new SimpleDateFormat("yyyyMMdd").parse(result.getSignDate().getWords());//定义起始日期
                             submitDingDanBean.setIdCard_BeginDate(sdf0.format(d1));
@@ -304,7 +347,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         etXingbie.setText(result.getGender().toString());
         etMinzu.setText(result.getEthnic().toString());
         String str=result.getBirthday().toString();
-        SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy-MM-dd");//定义
+        SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy/MM/dd");//定义
         try {
             Date d1 = new SimpleDateFormat("yyyyMMdd").parse(str);//定义起始日期
             etChushengnianyue.setText(sdf0.format(d1));
@@ -318,7 +361,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
     private void setFaHuoReniNFO() {
         etFahuoren.setText(LOGApplication.getUserinfo().getO_Name());
         etFahuoshouji.setText(LOGApplication.getUserinfo().getO_Tel());
-        tvFahuodizhi.setText(LOGApplication.getUserinfo().getO_Province() + LOGApplication.getUserinfo().getO_City() + LOGApplication.getUserinfo().getO_District());
+        tvFahuodiqu.setText(LOGApplication.getUserinfo().getO_Province() + LOGApplication.getUserinfo().getO_City() + LOGApplication.getUserinfo().getO_District());
         etFahuoxiangxidizhi.setText(LOGApplication.getUserinfo().getO_Address());
         submitDingDanBean.setW_F_Province(LOGApplication.getUserinfo().getO_Province());
         submitDingDanBean.setW_F_City(LOGApplication.getUserinfo().getO_City());
@@ -392,16 +435,21 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
         params.addBodyParameter("DataType", "Waybill_Save");
         params.addBodyParameter("weight", shijiweight);
-        params.addBodyParameter("tab", GsonUtils.toJSON(submitDingDanBean));
+        params.addBodyParameter("tab","["+GsonUtils.toJSON(submitDingDanBean)+"]");
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
-                NetBean<String, ?> responseT = GsonUtils
+                NetBean<SubmitDingDanBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
-                                new TypeToken<NetBean<String, ?>>() {
+                                new TypeToken<NetBean<SubmitDingDanBean, ?>>() {
                                 }.getType());
                 if (responseT.isOk()) {
+                    if (submitDingDanBean.getW_ID().equals("0")){
+                        DeleteInfo();
+                    }
+                    LOGApplication.removeAllActiviyies();
+                    ToastUtil.showShort("提交完成");
                     dismissLoadingDialog();
                 }
             }
@@ -465,18 +513,25 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
             submitDingDanBean.setW_S_Province(province.C_Province);
             submitDingDanBean.setW_S_City(city.C_City);
             submitDingDanBean.setW_S_District(county.C_District);
-            tvSuozaidiqu.setText(s);
+            tvShouHuodiqu.setText(s);
         } else if (LibraryApplication.getAddressType().equals("Japan")) {
             submitDingDanBean.setW_F_Province(province.C_Province);
             submitDingDanBean.setW_F_City(city.C_City);
             submitDingDanBean.setW_F_District(county.C_District);
-            tvFahuodizhi.setText(s);
+            tvFahuodiqu.setText(s);
         }
         if (dialog_china != null) {
             dialog_china.dismiss();
         }
         if (dialog_japan != null) {
             dialog_japan.dismiss();
+        }
+    }
+    private void DeleteInfo() {
+        try {
+            fs.saveToSD("logdingdan.txt", "");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

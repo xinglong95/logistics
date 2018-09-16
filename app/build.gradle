@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
+
 def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
 }
+
 android {
     android.applicationVariants.all { variant ->
         variant.outputs.all {

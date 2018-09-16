@@ -37,7 +37,6 @@
                 android:textSize="16sp"
                 android:hint="请输入账号"
                 android:layout_marginLeft="15dp"
-                android:text="0001"
                 />
         </LinearLayout>
         <TextView
@@ -71,7 +70,6 @@
                 android:hint="请输入密码"
                 android:layout_marginLeft="15dp"
                 android:inputType="textPassword"
-                android:text="111"
                 />
         </LinearLayout>
         <TextView
