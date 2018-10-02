@@ -410,6 +410,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<String, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -421,7 +422,8 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
                     } else {
                         submitDingDanBean.setIdCard_Tail(responseT.getInfo());
                     }
-                    dismissLoadingDialog();
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
@@ -439,6 +441,7 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<SubmitDingDanBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -450,7 +453,8 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
                     }
                     LOGApplication.removeAllActiviyies();
                     ToastUtil.showShort("提交完成");
-                    dismissLoadingDialog();
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });

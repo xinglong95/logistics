@@ -79,13 +79,13 @@ public class ChangePassActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<ShangPinInfoBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
                                 new TypeToken<NetBean<ShangPinInfoBean, ?>>() {
                                 }.getType());
                 if (responseT.isOk()) {
-                    dismissLoadingDialog();
                     LOGApplication.reMoveLoginPassWord();
                     ToastUtil.showShort("修改成功请重新登录");
                     startActivity(new Intent(me, LoginActivity.class));

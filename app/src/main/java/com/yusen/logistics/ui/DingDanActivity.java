@@ -149,6 +149,7 @@ public class DingDanActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<SubmitDingDanBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -160,9 +161,9 @@ public class DingDanActivity extends BaseActivity {
                         etShijizhongliang.setText(responseT.getData().getW_Actual_Weight());
                         submitDingDanBean=responseT.getData();
                     }
-                    dismissLoadingDialog();
+
                 } else {
-                    dismissLoadingDialog();
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
@@ -178,6 +179,7 @@ public class DingDanActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<?, ShangPinInfoBean> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -196,9 +198,9 @@ public class DingDanActivity extends BaseActivity {
                          adapter.setDatas(list_num);
                          getAllWei_Pric();
                     }
-                    dismissLoadingDialog();
+
                 } else {
-                    dismissLoadingDialog();
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
@@ -214,6 +216,7 @@ public class DingDanActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<ShangPinInfoBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -243,9 +246,9 @@ public class DingDanActivity extends BaseActivity {
                         adapter.setDatas(list_num);
                         getAllWei_Pric();
                     }
-                    dismissLoadingDialog();
+
                 } else {
-                    dismissLoadingDialog();
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });

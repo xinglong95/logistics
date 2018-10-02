@@ -12,6 +12,7 @@ import com.citzx.cslibrary.net.NetBean;
 import com.citzx.cslibrary.net.RequestCallBack;
 import com.citzx.cslibrary.net.XutilHttpHelp;
 import com.citzx.cslibrary.utils.GsonUtils;
+import com.citzx.cslibrary.utils.ToastUtil;
 import com.citzx.cslibrary.view.AbsBaseAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.yusen.logistics.R;
@@ -74,11 +75,13 @@ public class YunDanListActivity extends BaseActivity {
      * 获取运单列表
      */
     private void getDingDanList() {
+        showLoadingDialog();
         RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
         params.addBodyParameter("DataType", "Waybill_List");
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<?, YunDanListBean> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -89,6 +92,8 @@ public class YunDanListActivity extends BaseActivity {
                         list = responseT.getDatas();
                         setData();
                     }
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });

@@ -68,13 +68,13 @@ public class LoginActivity extends BaseActivity {
             XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
                 @Override
                 public void onSuccess(String result) {
+                    dismissLoadingDialog();
                     NetBean<LoginInfoBean, ?> responseT = GsonUtils
                             .parseJson(
                                     result,
                                     new TypeToken<NetBean<LoginInfoBean, ?>>() {
                                     }.getType());
                     if (responseT.isOk()) {
-                        dismissLoadingDialog();
                         LOGApplication.setToken(responseT.getData().getToken());
                         LOGApplication.setUserinfo(responseT.getData());
                         LOGApplication.setUsername(etZhanghao.getText().toString());
@@ -82,6 +82,8 @@ public class LoginActivity extends BaseActivity {
                         ToastUtil.showShort("登录成功");
                         startActivity(new Intent(me, MainActivity.class));
                         me.finish();
+                    }else{
+                        ToastUtil.showShort(responseT.getInfo());
                     }
                 }
             });

@@ -104,12 +104,14 @@ public class AddShangPinActivity extends BaseActivity {
      * 获取商品信息
      */
     private void getShangPinInfo(String barcode) {
+        showLoadingDialog();
         RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
         params.addBodyParameter("DataType", "Product_Scan");
         params.addBodyParameter("barcode",barcode);
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<ShangPinInfoBean, ?> responseT = GsonUtils
                         .parseJson(
                                 result,
@@ -119,6 +121,8 @@ public class AddShangPinActivity extends BaseActivity {
                     if (responseT.getData()!=null){
                         setText(responseT.getData());
                     }
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
@@ -303,15 +307,17 @@ public class AddShangPinActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<?, PinPaiBean> responseT = GsonUtils
                         .parseJson(
                                 result,
                                 new TypeToken<NetBean<?, PinPaiBean>>() {
                                 }.getType());
                 if (responseT.isOk()) {
-                    dismissLoadingDialog();
                     ToastUtil.showShort("更新完成!");
                     me.finish();
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
@@ -334,15 +340,17 @@ public class AddShangPinActivity extends BaseActivity {
         XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
             @Override
             public void onSuccess(String result) {
+                dismissLoadingDialog();
                 NetBean<?, PinPaiBean> responseT = GsonUtils
                         .parseJson(
                                 result,
                                 new TypeToken<NetBean<?, PinPaiBean>>() {
                                 }.getType());
                 if (responseT.isOk()) {
-                    dismissLoadingDialog();
                     ToastUtil.showShort("上传完成!");
                     me.finish();
+                }else{
+                    ToastUtil.showShort(responseT.getInfo());
                 }
             }
         });
