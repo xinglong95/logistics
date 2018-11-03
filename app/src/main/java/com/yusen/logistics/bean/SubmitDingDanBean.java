@@ -66,6 +66,42 @@ public class SubmitDingDanBean implements Serializable {
     private String IdCard_Head;
     private String IdCard_Tail;
     private String W_Actual_Weight;
+    private String D_ID;
+    private String W_Ems_Number;
+    private String W_Ems_Company;
+    private String WS_Fee;
+
+    public String getD_ID() {
+        return D_ID;
+    }
+
+    public void setD_ID(String d_ID) {
+        D_ID = d_ID;
+    }
+
+    public String getW_Ems_Number() {
+        return W_Ems_Number;
+    }
+
+    public void setW_Ems_Number(String w_Ems_Number) {
+        W_Ems_Number = w_Ems_Number;
+    }
+
+    public String getW_Ems_Company() {
+        return W_Ems_Company;
+    }
+
+    public void setW_Ems_Company(String w_Ems_Company) {
+        W_Ems_Company = w_Ems_Company;
+    }
+
+    public String getWS_Fee() {
+        return WS_Fee;
+    }
+
+    public void setWS_Fee(String WS_Fee) {
+        this.WS_Fee = WS_Fee;
+    }
 
     public String getW_Actual_Weight() {
         return W_Actual_Weight;

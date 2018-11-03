@@ -27,11 +27,12 @@ import com.yusen.logistics.R;
 import com.yusen.logistics.base.APIConfig;
 import com.yusen.logistics.base.BaseActivity;
 import com.yusen.logistics.base.ConstantConfig;
+import com.yusen.logistics.bean.KuaiDiBean;
 import com.yusen.logistics.bean.ShangPinInfoBean;
-import com.yusen.logistics.bean.ShangPinItem;
 import com.yusen.logistics.bean.ShangPinJiShuBean;
 import com.yusen.logistics.bean.SubmitDingDanBean;
 import com.yusen.logistics.utils.FileService;
+import com.yusen.logistics.utils.SerachSelectDialog;
 
 import org.xutils.http.RequestParams;
 
@@ -64,6 +65,10 @@ public class DingDanActivity extends BaseActivity {
     LinearLayout llYundandanhao;
     @Bind(R.id.et_shijizhongliang)
     EditText etShijizhongliang;
+    @Bind(R.id.tv_kuaidigongsi)
+    TextView tvKuaidigongsi;
+    @Bind(R.id.et_kuaidifei)
+    EditText etKuaidifei;
     private BroadcastReceiver mReceiver;
     private IntentFilter mFilter;
     ScannerInerface Controll = new ScannerInerface(this);
@@ -73,6 +78,7 @@ public class DingDanActivity extends BaseActivity {
     final FileService fs = new FileService(me);
     SubmitDingDanBean submitDingDanBean;
     String wid;
+
     //6923410717242
     //6920312611029
     @Override
@@ -103,14 +109,14 @@ public class DingDanActivity extends BaseActivity {
                 viewHolder.bindTextView(R.id.tv_zhongliang, data.getBean().getP_Weight() + "g");
                 viewHolder.bindTextView(R.id.tv_jiage, data.getBean().getP_Price());
                 viewHolder.bindTextView(R.id.tv_shuliang, data.getCount() + "");
-                ImageView iv_shanchu= (ImageView) viewHolder.getView(R.id.iv_shanchu);
+                ImageView iv_shanchu = (ImageView) viewHolder.getView(R.id.iv_shanchu);
                 iv_shanchu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (data.getCount()>1){
-                            int count=list_num.get(position).getCount()-1;
+                        if (data.getCount() > 1) {
+                            int count = list_num.get(position).getCount() - 1;
                             list_num.get(position).setCount(count);
-                        }else{
+                        } else {
                             list_num.remove(position);
                         }
                         adapter.setDatas(list_num);
@@ -126,18 +132,20 @@ public class DingDanActivity extends BaseActivity {
                 me.finish();
             }
         });
-        wid=getIntent().getStringExtra("WID");
-        if (MTextUtils.notEmpty(wid)){
+        wid = getIntent().getStringExtra("WID");
+        if (MTextUtils.notEmpty(wid)) {
             tvTitle.setText("编辑订单");
             getShangPinList(wid);
             getYundanInfo(wid);
             llYundandanhao.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             tvTitle.setText("创建订单");
             ReadInfo();
             llYundandanhao.setVisibility(View.GONE);
         }
+        getKuaiDiShuJu();
     }
+
     /**
      * 获取商品信息
      */
@@ -156,10 +164,10 @@ public class DingDanActivity extends BaseActivity {
                                 new TypeToken<NetBean<SubmitDingDanBean, ?>>() {
                                 }.getType());
                 if (responseT.isOk()) {
-                    if (responseT.getData()!=null){
+                    if (responseT.getData() != null) {
                         tvYundandanhao.setText(responseT.getData().getW_OrderNo());
                         etShijizhongliang.setText(responseT.getData().getW_Actual_Weight());
-                        submitDingDanBean=responseT.getData();
+                        submitDingDanBean = responseT.getData();
                     }
 
                 } else {
@@ -168,6 +176,7 @@ public class DingDanActivity extends BaseActivity {
             }
         });
     }
+
     /**
      * 获取商品信息列表
      */
@@ -188,15 +197,15 @@ public class DingDanActivity extends BaseActivity {
                 if (responseT.isOk()) {
                     if (responseT.getDatas() != null) {
                         for (int i = 0; i < responseT.getDatas().size(); i++) {
-                            ShangPinJiShuBean bean=new ShangPinJiShuBean();
-                            double count=Double.parseDouble(responseT.getDatas().get(i).getWS_FirstCount());
-                            bean.setCount((int)count);
+                            ShangPinJiShuBean bean = new ShangPinJiShuBean();
+                            double count = Double.parseDouble(responseT.getDatas().get(i).getWS_FirstCount());
+                            bean.setCount((int) count);
                             bean.setBean(responseT.getDatas().get(i));
                             list_num.add(bean);
                         }
 //                         list_num=AssembleData(responseT.getDatas());
-                         adapter.setDatas(list_num);
-                         getAllWei_Pric();
+                        adapter.setDatas(list_num);
+                        getAllWei_Pric();
                     }
 
                 } else {
@@ -205,6 +214,7 @@ public class DingDanActivity extends BaseActivity {
             }
         });
     }
+
     /**
      * 获取商品信息
      */
@@ -252,6 +262,67 @@ public class DingDanActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 获取快递公司名称
+     */
+    List<String> kuaidiname;
+    List<KuaiDiBean> kuaidiBeans;
+
+    private void getKuaiDiShuJu() {
+        RequestParams params = new RequestParams(APIConfig.ShangPin.getShangPin);
+        params.addBodyParameter("DataType", "Delivery_List");
+        XutilHttpHelp.getInstance().BaseInfoHttp(params, me, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(String result) {
+                NetBean<?, KuaiDiBean> responseT = GsonUtils
+                        .parseJson(
+                                result,
+                                new TypeToken<NetBean<?, KuaiDiBean>>() {
+                                }.getType());
+                if (responseT.isOk()) {
+                    kuaidiname = new ArrayList<>();
+                    kuaidiBeans = responseT.getDatas();
+                    if (kuaidiBeans != null && kuaidiBeans.size() != 0) {
+                        for (int i = 0; i < kuaidiBeans.size(); i++) {
+                            kuaidiname.add(kuaidiBeans.get(i).getD_Company());
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 打开选择快递dialog
+     */
+    public void OpenKuaiDiDiaLog() {
+        if (kuaidiname == null && kuaidiBeans.size() == 0) {
+            getKuaiDiShuJu();
+            ToastUtil.showShort("快递公司获取失败！正在重新获取");
+            return;
+        }
+        SerachSelectDialog.Builder alert = new SerachSelectDialog.Builder(me);
+        alert.setListData(kuaidiname);
+        alert.setTitle("请选择快递公司");
+        alert.setSelectedListiner(new SerachSelectDialog.Builder.OnSelectedListiner() {
+            @Override
+            public void onSelected(String info) {
+                tvKuaidigongsi.setText(info);
+                for (KuaiDiBean paiBean : kuaidiBeans) {
+                    if (paiBean.getD_Company().equals(info)) {
+                        submitDingDanBean.setD_ID(paiBean.getD_ID());
+                        submitDingDanBean.setW_Ems_Company(paiBean.getD_Company());
+                        submitDingDanBean.setW_Ems_Number(paiBean.getD_Number());
+                        break;
+                    }
+                }
+            }
+        });
+        SerachSelectDialog mDialog = alert.show();
+        //设置Dialog 尺寸
+        mDialog.setDialogWindowAttr(0.9, 0.9, me);
     }
 
     private List<ShangPinJiShuBean> AssembleData(List<ShangPinInfoBean> data) {
@@ -328,7 +399,7 @@ public class DingDanActivity extends BaseActivity {
     protected void onPause() {
         // 注销获取扫描结果的广播+
         this.unregisterReceiver(mReceiver);
-        if (MTextUtils.isEmpty(wid)){
+        if (MTextUtils.isEmpty(wid)) {
             SaveInfo();
         }
         super.onPause();
@@ -344,19 +415,24 @@ public class DingDanActivity extends BaseActivity {
 
     @OnClick(R.id.btn_tijiaodingdan)
     public void onViewClicked() {
+        submitDingDanBean.setWS_Fee(etKuaidifei.getText().toString());
 //        list_num=new ArrayList<>();
-        if (list_num.size()==0){
+        if (list_num.size() == 0) {
             ToastUtil.showShort("请扫描商品");
-        }else if(MTextUtils.isEmpty(etShijizhongliang.getText().toString())||Double.parseDouble(etShijizhongliang.getText().toString())>40000){
+        } else if (MTextUtils.isEmpty(etShijizhongliang.getText().toString()) || Double.parseDouble(etShijizhongliang.getText().toString()) > 40000) {
             ToastUtil.showShort("请填写实际重量且不能超过40kg");
-        }else{
+        } else if (MTextUtils.isEmpty(submitDingDanBean.getW_Ems_Company())){
+            ToastUtil.showShort("请选择快递公司");
+        } else if (MTextUtils.isEmpty(submitDingDanBean.getWS_Fee())){
+            ToastUtil.showShort("请填写快递费");
+        } else {
             List<ShangPinInfoBean> items = new ArrayList<>();
             for (int i = 0; i < list_num.size(); i++) {
                 ShangPinInfoBean item = new ShangPinInfoBean();
-                item=list_num.get(i).getBean();
+                item = list_num.get(i).getBean();
                 double count = (double) list_num.get(i).getCount();
                 double price = Double.parseDouble(list_num.get(i).getBean().getP_Price());
-                item.setWS_FirstCount(list_num.get(i).getCount()+"");
+                item.setWS_FirstCount(list_num.get(i).getCount() + "");
                 item.setWS_Money((count * price) + "");
                 items.add(item);
             }
@@ -365,7 +441,7 @@ public class DingDanActivity extends BaseActivity {
             Bundle bundle = new Bundle();
             bundle.putSerializable("DingDan", submitDingDanBean);
             intent.putExtras(bundle);
-            intent.putExtra("weight",etShijizhongliang.getText().toString());
+            intent.putExtra("weight", etShijizhongliang.getText().toString());
             startActivity(intent);
         }
 
@@ -396,4 +472,8 @@ public class DingDanActivity extends BaseActivity {
         }
     }
 
+    @OnClick(R.id.tv_kuaidigongsi)
+    public void onViewClicked_kuaidi() {
+        OpenKuaiDiDiaLog();
+    }
 }

@@ -98,6 +98,52 @@
         android:background="#d9d9d9"
         />
     <LinearLayout
+        style="@style/ll_shangchuanshangpin"
+        android:layout_height="40dp"
+        android:paddingLeft="15dp"
+        >
+        <TextView
+            style="@style/tv_shangchuanshangpin_l"
+            android:text="快递公司："
+            />
+        <TextView
+            android:id="@+id/tv_kuaidigongsi"
+            android:hint="请选择快递公司"
+            style="@style/tv_shangchuanshangpin_r"
+            android:inputType="numberDecimal"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d9d9d9"
+        />
+    <LinearLayout
+        style="@style/ll_shangchuanshangpin"
+        android:layout_height="40dp"
+        android:paddingLeft="15dp"
+        >
+        <TextView
+            style="@style/tv_shangchuanshangpin_l"
+            android:text="快递费："
+            />
+        <EditText
+            android:id="@+id/et_kuaidifei"
+            android:hint="请填写快递费"
+            style="@style/tv_shangchuanshangpin_r"
+            android:inputType="numberDecimal"
+            />
+        <TextView
+            style="@style/tv_shangchuanshangpin_r"
+            android:text="元"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d9d9d9"
+        />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingRight="25dp"
