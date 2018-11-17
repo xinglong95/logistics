@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,16 +55,35 @@
             android:text="收货地址：山东省IQ能够安达市是大神解答解答角度看"
             />
     </LinearLayout>
-    <TextView
-        android:id="@+id/tv_fahuoshijian"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="25dp"
-        android:textSize="14sp"
-        android:textColor="@color/black333"
-        android:text="1022-56-89 90:90"
-        >
-    </TextView>
+   <LinearLayout
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       >
+       <TextView
+           android:id="@+id/tv_fahuoshijian"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_weight="1"
+           android:minHeight="25dp"
+           android:textSize="14sp"
+           android:textColor="@color/black333"
+           android:text="1022-56-89 90:90"
+           >
+       </TextView>
+       <Button
+           android:id="@+id/btn_dayin"
+           android:layout_width="match_parent"
+           android:layout_height="30dp"
+           android:minHeight="25dp"
+           android:textSize="12sp"
+           android:textColor="@color/white"
+           android:text="打印标贴"
+           android:background="@drawable/btn_strip"
+           >
+       </Button>
+   </LinearLayout>
+
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"

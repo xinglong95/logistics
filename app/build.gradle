@@ -17,8 +17,8 @@ android {
         applicationId "com.yusen.logistics"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构
@@ -51,4 +51,7 @@ dependencies {
     implementation project(':cslibrary')
     implementation project(':picture_library')
     implementation files('libs/ocr-sdk.jar')
+    implementation files('libs/gprintersdkv22.jar')
+    implementation files('libs/jcc-bate-0.7.3.jar')
+    implementation files('libs/ksoap2-android-assembly-2.5.2-jar-with-dependencies.jar')
 }

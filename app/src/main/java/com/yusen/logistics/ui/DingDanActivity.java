@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +70,10 @@ public class DingDanActivity extends BaseActivity {
     TextView tvKuaidigongsi;
     @Bind(R.id.et_kuaidifei)
     EditText etKuaidifei;
+    @Bind(R.id.tv_kuaididanhao)
+    TextView tvKuaididanhao;
+    @Bind(R.id.btn_saomiaokuaidihao)
+    Button btnSaomiaokuaidihao;
     private BroadcastReceiver mReceiver;
     private IntentFilter mFilter;
     ScannerInerface Controll = new ScannerInerface(this);
@@ -78,7 +83,7 @@ public class DingDanActivity extends BaseActivity {
     final FileService fs = new FileService(me);
     SubmitDingDanBean submitDingDanBean;
     String wid;
-
+    boolean isScanKuaiDiDan=false;
     //6923410717242
     //6920312611029
     @Override
@@ -97,9 +102,13 @@ public class DingDanActivity extends BaseActivity {
             public void onReceive(Context context, Intent intent) {
                 // 此处获取扫描结果信息
                 final String scanResult = intent.getStringExtra("value");
-                int barocodelen = intent.getIntExtra("length", 0);
-                int type = intent.getIntExtra("type", 0);
-                getShangPinInfo(scanResult);
+                if (!isScanKuaiDiDan){
+                    int barocodelen = intent.getIntExtra("length", 0);
+                    int type = intent.getIntExtra("type", 0);
+                    getShangPinInfo(scanResult);
+                }else{
+                    tvKuaididanhao.setText(scanResult);
+                }
             }
         };
         adapter = new AbsBaseAdapter<ShangPinJiShuBean>(this, R.layout.adapter_list) {
@@ -144,6 +153,19 @@ public class DingDanActivity extends BaseActivity {
             llYundandanhao.setVisibility(View.GONE);
         }
         getKuaiDiShuJu();
+        btnSaomiaokuaidihao.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    isScanKuaiDiDan=true;
+                    Controll.scan_start();
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    isScanKuaiDiDan=false;
+                    Controll.scan_stop();
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -167,6 +189,9 @@ public class DingDanActivity extends BaseActivity {
                     if (responseT.getData() != null) {
                         tvYundandanhao.setText(responseT.getData().getW_OrderNo());
                         etShijizhongliang.setText(responseT.getData().getW_Actual_Weight());
+                        tvKuaidigongsi.setText(responseT.getData().getW_Ems_Company());
+                        etKuaidifei.setText(responseT.getData().getW_Fee());
+                        tvKuaididanhao.setText(responseT.getData().getW_Courier_Number());
                         submitDingDanBean = responseT.getData();
                     }
 
@@ -415,15 +440,16 @@ public class DingDanActivity extends BaseActivity {
 
     @OnClick(R.id.btn_tijiaodingdan)
     public void onViewClicked() {
-        submitDingDanBean.setWS_Fee(etKuaidifei.getText().toString());
+        submitDingDanBean.setW_Fee(etKuaidifei.getText().toString());
+        submitDingDanBean.setW_Courier_Number(tvKuaididanhao.getText().toString());
 //        list_num=new ArrayList<>();
         if (list_num.size() == 0) {
             ToastUtil.showShort("请扫描商品");
-        } else if (MTextUtils.isEmpty(etShijizhongliang.getText().toString()) || Double.parseDouble(etShijizhongliang.getText().toString()) > 40000) {
-            ToastUtil.showShort("请填写实际重量且不能超过40kg");
-        } else if (MTextUtils.isEmpty(submitDingDanBean.getW_Ems_Company())){
+        } else if (MTextUtils.isEmpty(submitDingDanBean.getW_Ems_Company())) {
             ToastUtil.showShort("请选择快递公司");
-        } else if (MTextUtils.isEmpty(submitDingDanBean.getWS_Fee())){
+        } else if (MTextUtils.isEmpty(submitDingDanBean.getW_Courier_Number())) {
+            ToastUtil.showShort("请扫描快递单号");
+        } else if (MTextUtils.isEmpty(submitDingDanBean.getW_Fee())) {
             ToastUtil.showShort("请填写快递费");
         } else {
             List<ShangPinInfoBean> items = new ArrayList<>();

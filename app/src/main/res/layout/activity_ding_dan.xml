@@ -121,6 +121,36 @@
     <LinearLayout
         style="@style/ll_shangchuanshangpin"
         android:layout_height="40dp"
+        android:paddingLeft="15dp">
+        <TextView
+            style="@style/tv_shangchuanshangpin_l"
+            android:text="快递单号："
+            />
+
+        <TextView
+            android:id="@+id/tv_kuaididanhao"
+            style="@style/tv_shangchuanshangpin_r"
+            android:hint="请扫描快递单号"
+            />
+        <Button
+            android:id="@+id/btn_saomiaokuaidihao"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:text="扫描快递单"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_strip"
+            android:layout_margin="3dp"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#d9d9d9"
+        />
+    <LinearLayout
+        style="@style/ll_shangchuanshangpin"
+        android:layout_height="40dp"
         android:paddingLeft="15dp"
         >
         <TextView
@@ -226,7 +256,7 @@
         android:textSize="16sp"
         android:textColor="@color/white"
         android:gravity="center"
-        android:background="@color/btn_bg"
+        android:background="@drawable/btn_strip"
         android:layout_margin="15dp"
         />
 </LinearLayout>

@@ -69,7 +69,26 @@ public class SubmitDingDanBean implements Serializable {
     private String D_ID;
     private String W_Ems_Number;
     private String W_Ems_Company;
-    private String WS_Fee;
+    private String W_Courier_Number;
+    private String W_Fee;
+    private String W_Firstcount;
+
+
+    public String getW_Courier_Number() {
+        return W_Courier_Number;
+    }
+
+    public void setW_Courier_Number(String w_Courier_Number) {
+        W_Courier_Number = w_Courier_Number;
+    }
+
+    public String getW_Firstcount() {
+        return W_Firstcount;
+    }
+
+    public void setW_Firstcount(String w_Firstcount) {
+        W_Firstcount = w_Firstcount;
+    }
 
     public String getD_ID() {
         return D_ID;
@@ -95,12 +114,12 @@ public class SubmitDingDanBean implements Serializable {
         W_Ems_Company = w_Ems_Company;
     }
 
-    public String getWS_Fee() {
-        return WS_Fee;
+    public String getW_Fee() {
+        return W_Fee;
     }
 
-    public void setWS_Fee(String WS_Fee) {
-        this.WS_Fee = WS_Fee;
+    public void setW_Fee(String WS_Fee) {
+        this.W_Fee = WS_Fee;
     }
 
     public String getW_Actual_Weight() {

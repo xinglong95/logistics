@@ -163,9 +163,12 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         }
         etDaigouren.setText(submitDingDanBean.getW_D_Name());
         etDaigoudianhua.setText(submitDingDanBean.getW_D_Tel());
-
-        x.image().bind(ivIdcardZ,submitDingDanBean.getIdCard_Head());
-        x.image().bind(ivIdcardF,submitDingDanBean.getIdCard_Tail());
+        if (submitDingDanBean.getIdCard_Head().contains("/Image/")){
+            x.image().bind(ivIdcardZ,submitDingDanBean.getIdCard_Head());
+        }
+        if (submitDingDanBean.getIdCard_Tail().contains("/Image/")){
+            x.image().bind(ivIdcardF,submitDingDanBean.getIdCard_Tail());
+        }
         String path_z=submitDingDanBean.getIdCard_Head().substring(submitDingDanBean.getIdCard_Head().indexOf("/IdCard") + 1);
         String path_f=submitDingDanBean.getIdCard_Tail().substring(submitDingDanBean.getIdCard_Tail().indexOf("/IdCard") + 1);
         shijiweight=submitDingDanBean.getW_Actual_Weight();
@@ -466,14 +469,12 @@ public class AddIDCardActivity extends PhotoSelectBaseActivity implements OnAddr
         getText();
         boolean isNull=true;
         ArrayList<String> strs = new ArrayList<>();
-        strs = Tools.CheckNullByReflect4Keys(submitDingDanBean, new String[]{"Brand", "Brand_ID","P_type", "P_typeid","W_DeliveryDate","W_D_Name","W_D_Tel"});
+        strs = Tools.CheckNullByReflect4Keys(submitDingDanBean, new String[]{"Brand", "Brand_ID","P_type", "P_typeid","W_DeliveryDate","W_D_Name","W_D_Tel","IdCard_Name","IdCard_Organ"});
         LinkedHashMap<String, String> linkedHashMaps = new LinkedHashMap<>();
         linkedHashMaps.put("W_S_Name", "请填写收货人姓名");
         linkedHashMaps.put("W_S_Tel", "请填写收货人电话");
         linkedHashMaps.put("W_S_Province", "请选择收货地区");
         linkedHashMaps.put("W_S_Address", "请填写收货详细地址");
-        linkedHashMaps.put("IdCard_Name", "请上传身份证正面");
-        linkedHashMaps.put("IdCard_Organ", "请上传身份证反面");
         linkedHashMaps.put("W_F_Name", "请填写发货人姓名");
         linkedHashMaps.put("W_F_Tel", "请填写发货人电话");
         linkedHashMaps.put("W_F_Province", "请选择发货地区");

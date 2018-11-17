@@ -19,7 +19,6 @@ public class XutilHttpHelp {
 	private static XutilHttpHelp single=null;
 	private static  Context mContext;
 	/**
-	 * �����Ķ���
 	 */
 	public void setMethod(HttpMethod method) {
 		this.method = method;
